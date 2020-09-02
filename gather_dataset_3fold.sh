@@ -13,11 +13,9 @@ function move_case(){
   for j in {0,1,2,3}; do
     echo " class $j"
 
-    file_prefix="s[0-9]_fi${j}_fu[0-9]_b[0-9]_l[0-9]_audio\.wav"
+    file_prefix="[0-z_]+${class_code}${j}[0-z_]+_audio\.wav"
 
-    mkdir -p "${case_path}/fi${j}"
-
-    set_i=0
+    mkdir -p "${case_path}/${class_code}${j}"
 
     for f in *.wav; do
 
@@ -25,17 +23,11 @@ function move_case(){
       if [[ "$f" =~ ^${file_prefix} ]]; then
 
         # compressing audio because the library wants mono audio
-        ffmpeg -y -v 0 -i "${BASH_REMATCH[0]}" -ac 1 "${case_path}/fi${j}/o${i}_${BASH_REMATCH[0]}"
-
-        ## progress dots
-        # echo -n "."
+        ffmpeg -y -v 0 -i "${BASH_REMATCH[0]}" -ac 1 "${case_path}/${class_code}${j}/o${i}_${BASH_REMATCH[0]}"
 
       fi
 
     done
-
-    # echo "*"
-
   done
 
 }
@@ -64,14 +56,15 @@ function create_fold(){
 }
 
 echo "$PWD"
-if [ "$#" -ne "2" ]; then
-  echo "Usage: gather_dataset <source data path> <target data path>"
+if [ "$#" -ne "3" ]; then
+  echo "Usage: gather_dataset <source data path> <target data path> <class code>"
   exit 0
 fi
 
 initial_path="$PWD"
 source_path="$PWD/$1"
 target_path="$PWD/$2"
+class_code="$3"
 
 # create 3-folds
 for fold in {0,1,2}; do

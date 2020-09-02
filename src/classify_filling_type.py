@@ -5,15 +5,16 @@ import plotly.subplots
 import os, argparse, sys
 import pandas as pd
 
+class_code_dict = {'fi':'Filling type', 'fu': 'Filling level [%]'}
+
 def train():
 
-    data_folders = [dataset_path+"/train/fi"+str(i) for i in range(4)]
+    data_folders = [dataset_path+"/train/"+args.classcode+str(i) for i in range(4)]
 
     aT.extract_features_and_train(data_folders, 1.0, 1.0, aT.shortTermWindow, aT.shortTermStep, "svm", model_name, False)
 
 def predict(object_no):
-
-    results_dict = {"Object":[], "Sequence":[], "Filling type":[], "Filling type probability":[]}
+    results_dict = {"Object":[], "Sequence":[], class_name:[], class_name+" prob0":[]}
 
     i=0
     while(i<100):
@@ -28,8 +29,8 @@ def predict(object_no):
 
         results_dict['Object'].append(object_no)
         results_dict['Sequence'].append(seq_no)
-        results_dict['Filling type'].append(c)
-        results_dict['Filling type probability'].append(p[int(c)])
+        results_dict[class_name].append(c)
+        results_dict[class_name+' prob0'].append(p[int(c)])
 
         print("classified obj"+str(object_no)+" "+seq_no+" : "+str(c))
         i+=1
@@ -41,6 +42,8 @@ if __name__ == '__main__':
     # required
     parser.add_argument('-d', '--datapath', help='Path of the dataset wrt current working directory.', required=True)
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
+    parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu).', required=True)
+
     # optional
     # TODO: implement quiet option
     parser.add_argument('-q', '--quiet', help='Print nothing but the result.', action='store_true')
@@ -50,10 +53,11 @@ if __name__ == '__main__':
     dataset_path = args.datapath
 
     model_name = args.modelname
+    class_name=class_code_dict[args.classcode]
 
     # train()
 
-    df = pd.DataFrame(columns=["Object", "Sequence", "Filling type", "Filling type probability"])
+    df = pd.DataFrame(columns=["Object", "Sequence", class_name, class_name+" prob0"])
 
     for obj in [10,11,12]:
         df_obj = predict(obj)
