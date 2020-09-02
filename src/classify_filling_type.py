@@ -5,19 +5,20 @@ import plotly.subplots
 import os, argparse, sys
 import pandas as pd
 
-class_code_dict = {'fi':'Filling type', 'fu': 'Filling level [%]'}
+class_code_dict = {'fi':{'name':'Filling type', 'count':4}, 'fu': {'name':'Filling level [%]', 'count':3}}
 
 def train():
 
-    data_folders = [dataset_path+"/train/"+args.classcode+str(i) for i in range(4)]
+    data_folders = [dataset_path+"/train/"+args.classcode+str(i) for i in range(class_count)]
 
     aT.extract_features_and_train(data_folders, 1.0, 1.0, aT.shortTermWindow, aT.shortTermStep, args.algorithm, model_name, False)
 
 def predict(object_no):
-    results_dict = {"Object":[], "Sequence":[], class_name:[], class_name+" prob0":[]}
+    # create empty array (column) for each name
+    results_dict = {name:[] for name in columns_names}
 
     i=0
-    while(i<100):
+    while(i<200):
         seq_no = str(i).zfill(4)
         fname=dataset_path+"/test/o"+str(object_no)+"_"+seq_no+"_audio.wav"
 
@@ -30,7 +31,9 @@ def predict(object_no):
         results_dict['Object'].append(object_no)
         results_dict['Sequence'].append(seq_no)
         results_dict[class_name].append(c)
-        results_dict[class_name+' prob0'].append(p[int(c)])
+        # class probabilities
+        for k in range(class_count):
+            results_dict[class_name+' prob'+str(k)].append(p[k])
 
         print("classified obj"+str(object_no)+" "+seq_no+" : "+str(c))
         i+=1
@@ -54,11 +57,12 @@ if __name__ == '__main__':
     dataset_path = args.datapath
 
     model_name = args.modelname
-    class_name=class_code_dict[args.classcode]
+    class_name = class_code_dict[args.classcode]['name']
+    class_count = class_code_dict[args.classcode]['count']
 
-    # train()
-
-    df = pd.DataFrame(columns=["Object", "Sequence", class_name, class_name+" prob0"])
+    train()
+    columns_names=["Object", "Sequence", class_name] + [class_name+" prob"+str(i) for i in range(class_count)]
+    df = pd.DataFrame(columns=columns_names)
 
     for obj in [10,11,12]:
         df_obj = predict(obj)
