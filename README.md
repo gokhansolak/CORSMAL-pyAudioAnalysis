@@ -15,11 +15,11 @@ _Data paths_ should be specified w.r.t. the current working directory of the ter
 
 Then, the 3-fold classification/test sequence can be run using `classify_filling_type_3fold.py`:
 ```
-python3 src/classify_filling_type_3fold.py -d <target data path> -m model_name -c <class code>
+python3 src/classify_filling_type_3fold.py -d <target data path> -m model_name -c <class code> -a <algorithm>
 ```
 Usage (fi: filling type, fu: filling level):
 ```
-classify_filling_type_3fold.py [-h] -d DATAPATH -m MODELNAME -c CLASSCODE [-q]
+classify_filling_type_3fold.py [-h] -d DATAPATH -m MODELNAME [-c CLASSCODE] [-a ALGORITHM] [-q]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -28,8 +28,11 @@ optional arguments:
   -m MODELNAME, --modelname MODELNAME
                         Name of the model, used for output names.
   -c CLASSCODE, --classcode CLASSCODE
-                        Code of the class identifier (fi, fu).
+                        Code of the class identifier (fi, fu). Default: fi.
+  -a ALGORITHM, --algorithm ALGORITHM
+                        Classifier: svm, svm_rbf, randomforest...
   -q, --quiet           Print nothing but the result.
+
 
 ```
 
@@ -45,7 +48,7 @@ The usage is same as in 3-fold.
 
 Then, the classification sequence can be run using `classify_filling_type.py`:
 ```
-python3 src/classify_filling_type.py -d <target data path> -m model_name -c <class code>
+python3 src/classify_filling_type.py -d <target data path> -m model_name -c <class code> -a <algorithm>
 ```
 
 Again, the usage is the same as the 3-fold above. It will save a _csv_ file named as "model_name_result.csv" that contains the case ids and predicted labels and the confidence probabilities.

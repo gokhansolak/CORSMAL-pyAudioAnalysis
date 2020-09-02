@@ -11,7 +11,7 @@ def train():
 
     data_folders = [dataset_path+"/train/"+args.classcode+str(i) for i in range(4)]
 
-    aT.extract_features_and_train(data_folders, 1.0, 1.0, aT.shortTermWindow, aT.shortTermStep, "svm", model_name, False)
+    aT.extract_features_and_train(data_folders, 1.0, 1.0, aT.shortTermWindow, aT.shortTermStep, args.algorithm, model_name, False)
 
 def predict(object_no):
     results_dict = {"Object":[], "Sequence":[], class_name:[], class_name+" prob0":[]}
@@ -25,7 +25,7 @@ def predict(object_no):
         if not os.path.exists(fname):
             break;
 
-        c, p, probs_names = aT.file_classification(fname, model_name, "svm")
+        c, p, probs_names = aT.file_classification(fname, model_name, args.algorithm)
 
         results_dict['Object'].append(object_no)
         results_dict['Sequence'].append(seq_no)
@@ -42,7 +42,8 @@ if __name__ == '__main__':
     # required
     parser.add_argument('-d', '--datapath', help='Path of the dataset wrt current working directory.', required=True)
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
-    parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu).', required=True)
+    parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu). Default: fi.', default='fi')
+    parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: svm.', default='svm')
 
     # optional
     # TODO: implement quiet option
