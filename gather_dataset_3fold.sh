@@ -1,5 +1,5 @@
 #!/bin/bash
-# Moves CORSMAL audio files into class folders; the test data classes are not known.
+# Moves CORSMAL audio files into class folders; splits train and test folders.
 # NOTE: it will overwrite the files in the target folder, if any.
 
 function move_case(){
@@ -17,6 +17,8 @@ function move_case(){
 
     mkdir -p "${case_path}/fi${j}"
 
+    set_i=0
+
     for f in *.wav; do
 
       # echo $f
@@ -25,28 +27,37 @@ function move_case(){
         # compressing audio because the library wants mono audio
         ffmpeg -y -v 0 -i "${BASH_REMATCH[0]}" -ac 1 "${case_path}/fi${j}/o${i}_${BASH_REMATCH[0]}"
 
+        ## progress dots
+        # echo -n "."
+
       fi
 
     done
 
+    # echo "*"
 
   done
 
 }
 
-function move_unlabeled_data(){
-  i=$1
-  case_path=$2
+function create_fold(){
 
-  echo "object $i"
-  cd "${source_path}/$i/audio"
+  fold_no=$1
 
-  mkdir -p "${case_path}"
+  for i in {1,2,3,4,5,6,7,8,9}; do
 
-  for f in *.wav; do
+    # modulus for object types (cup,glass,box)
+    mod_i=$(($i % 3))
 
-    # compressing audio because the library wants mono audio
-    ffmpeg -y -v 0 -i "$f" -ac 1 "${case_path}/o${i}_$f"
+    if [[ "$mod_i" -eq ${fold_no} ]]; then
+      # test set
+      echo "test"
+      move_case "$i" "${target_path}/test${fold_no}"
+    else
+      # train set
+      echo "train"
+      move_case "$i" "${target_path}/train${fold_no}"
+    fi
 
   done
 
@@ -62,19 +73,10 @@ initial_path="$PWD"
 source_path="$PWD/$1"
 target_path="$PWD/$2"
 
-for i in {1,2,3,4,5,6,7,8,9}; do
-
-  # train set
-  echo "train"
-  move_case "$i" "${target_path}/train"
-
-done
-
-for i in {10,11,12}; do
-
-  # test set
-  echo "test"
-  move_unlabeled_data "$i" "${target_path}/test"
+# create 3-folds
+for fold in {0,1,2}; do
+  echo "=== fold $fold"
+  create_fold ${fold}
 
 done
 
