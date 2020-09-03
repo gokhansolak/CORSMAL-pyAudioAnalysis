@@ -31,15 +31,11 @@ def predict_object(object_no, model_name, algorithm, dirpath, column_names):
 
     files = [f for f in os.listdir(dirpath) if re.match(file_pattern, f)]
 
-    print(files)
-
     for fname in files:
         seq_no = re.match(file_pattern, fname).group(1)
 
         c, p, probs_names = \
             aT.file_classification(os.path.join(dirpath,fname), model_name, algorithm)
-
-        print(p)
 
         results_dict['Object'].append(object_no)
         results_dict['Sequence'].append(seq_no)
