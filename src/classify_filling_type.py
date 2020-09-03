@@ -34,7 +34,7 @@ if __name__ == '__main__':
     class_name = class_code_dict[args.classcode]['name']
     class_count = class_code_dict[args.classcode]['count']
 
-    # train()
+    train()
     column_names=["Object", "Sequence", class_name] + [class_name+" prob"+str(i) for i in range(class_count)]
     df = pd.DataFrame(columns=column_names)
 

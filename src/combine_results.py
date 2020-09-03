@@ -5,6 +5,8 @@ import os, argparse, sys
 import pandas as pd
 import re
 
+# import pdb
+
 def choose_index(i):
     # print(rowlist)
     res = rowlist[i].filter(regex='prob').squeeze()
@@ -12,12 +14,10 @@ def choose_index(i):
     # choose the maximum valued class
     max_str=res.idxmax()
 
-    # print(res)
-    # print(max_str[-1])
     return max_str[-1]
 
 def combine_max(rowlist):
-    # print(rowlist)
+
     res = rowlist[0]
     for r in rowlist[1:]:
         res = res.filter(regex='prob').add(r.filter(regex='prob'), fill_value=0)
@@ -60,6 +60,8 @@ if __name__ == '__main__':
     parser.add_argument('-o', '--output', help='Name of the output file, w/o extension.', default='combined')
     parser.add_argument('-c', '--classname', help='Name of the class.', default='Filling type')
 
+    parser.add_argument('-v', '--validation', help='Calculates the accuracy.', action='store_true')
+
     args = parser.parse_args()
 
     print('strategy: '+str(args.strategy))
@@ -77,7 +79,7 @@ if __name__ == '__main__':
         # put into list
         df_list.append(df)
 
-    # print(df_list)
+    # pdb.set_trace()
 
     # apply the specified strategy
     df_combined = pd.DataFrame(columns=['Object', 'Sequence', args.classname])
@@ -104,16 +106,12 @@ if __name__ == '__main__':
         new_row = {'Object':row['Object'], 'Sequence':row['Sequence'], args.classname:int(label)}
         df_combined = df_combined.append(new_row, ignore_index=True)
 
-        true_val = df_truth.loc[(df['Object'] == row['Object']) & (df['Sequence'] == row['Sequence'])][args.classname].iloc[0]
-        if int(label) == true_val:
-            true_pred += 1.0
+        if args.validation:
+            true_val = df_truth.loc[(df['Object'] == row['Object']) & (df['Sequence'] == row['Sequence'])][args.classname].iloc[0]
+            if int(label) == true_val:
+                true_pred += 1.0
 
     df_combined.to_csv(args.output+'.csv')
 
-    print(true_pred/len(df_truth['Object']))
-
-    # df_truth = df_truth[df.columns.drop(list(df.filter(regex='Unnamed')))]
-
-    # df_success = df_combined[args.classname] - df_truth[args.classname]
-    # df_success = df_success / df_success
-    # print(df_success)
+    if args.validation:
+        print(true_pred/len(df_truth['Object']))
