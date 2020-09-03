@@ -8,7 +8,7 @@ for d in ${path}/*; do
   echo $d
   # iterate files
   for f in $d/*;do
-    mv $f ${path}
+    cp $f ${path}
   done
 
 done
