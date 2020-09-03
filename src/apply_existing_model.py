@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# takes an already trained pyAudioAnalysis model and predicts the
+# audio file classes in the given folder
 import pyAudioAnalysis
 from pyAudioAnalysis import audioTrainTest as aT
 import plotly.subplots
