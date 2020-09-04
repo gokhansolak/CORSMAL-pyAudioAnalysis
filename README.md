@@ -4,7 +4,11 @@ Analyzing filling type & level task of the [CORSMAL challenge](http://corsmal.ee
 This code is a part of the team "Because It's Tactile".
 The rest of our team's code resides in [v-iashin/CORSMAL](https://github.com/v-iashin/CORSMAL) repository, please check it. Our team won the CORSMAL challenge in [2020 Intelligent Sensing Summer School](http://cis.eecs.qmul.ac.uk/school2020.html)!
 
+## Installation
 
+You should clone and [install pyAudioAnalysis](https://github.com/tyiannak/pyAudioAnalysis#installation) package.
+
+## Usage
 ### Validation set analysis
 
 `gather_validation_dataset.sh` puts the _wav_ files into a structured folder, separating classes, as expected by [pyAudioAnalysis](https://github.com/tyiannak/pyAudioAnalysis) library:
