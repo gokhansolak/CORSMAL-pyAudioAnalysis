@@ -1,7 +1,7 @@
-# CORSMAL Challenge Audio-only Analysis
+# CORSMAL Challenge pyAudioAnalysis
 
 Analyzing filling type & level task of the [CORSMAL challenge](http://corsmal.eecs.qmul.ac.uk/containers_manip.html) with only the audio modality using [pyAudioAnalysis](https://github.com/tyiannak/pyAudioAnalysis) library.
-I wrote this code as a part of the team "Because It's Tactile".
+This code is a part of the team "Because It's Tactile".
 The rest of our team's code resides in [v-iashin/CORSMAL](https://github.com/v-iashin/CORSMAL) repository, please check it. Our team won the CORSMAL challenge in [2020 Intelligent Sensing Summer School](http://cis.eecs.qmul.ac.uk/school2020.html)!
 
 
@@ -16,7 +16,7 @@ gather_validation_dataset.sh <source data path> <target data path> <class code>
 
 _Data paths_ should be specified w.r.t. the current working directory of the terminal. You can call it from another folder.
 The expected folder structures are shown at the end of this file.
-Killing the script in the middle may change the current directory.
+Killing the script in the middle may change the current directory. Class code should be "fi" for _filling type_, "fu" for _filling level_.
 
 Then, the training and 3-fold validation sequence can be run using `train_filling_validation.py`:
 ```
@@ -43,8 +43,8 @@ optional arguments:
 When run, it will extract audio features, tune model parameters automatically and finally output some useful statistics about the model performance.
 It is happening with minimal code, thanks to pyAudioAnalysis library!
 
-My results on the CORSMAL challenge data can be found in the _results/validation_ folder.
-Randomforest classifier gets ~94% on the filling type, ~70% accuracy on the filling level task.
+The results on the CORSMAL validation data can be found in the _results/validation/performance_ folder.
+Randomforest classifier gets ~94% on the filling type task and ~70% accuracy on the filling level task.
 
 ### Final analysis
 
@@ -64,6 +64,14 @@ python3 src/train_filling_final.py -d <target data path> -m model_name -c <class
 Again, the usage is the same as above. It will save a _csv_ file named as "model_name.csv" that contains the case ids and predicted labels and the confidence probabilities.
 We output the probabilities, so that we can ensemble the results with another model later.
 Our final CORSMAL predictions are compiled using the `main.py` file in [v-iashin/CORSMAL](https://github.com/v-iashin/CORSMAL) repository.
+
+You can apply the already trained models in _models_ folder to make predictions on objects _10, 11, 12_, as follows:
+
+```
+cd models
+python3 ../src/apply_existing_model.py -d <your-data-folder> -m "ftype-randomforest-final" -c "fi" -a "randomforest"
+python3 ../src/apply_existing_model.py -d <your-data-folder> -m "flevel-randomforest-final" -c "fu" -a "randomforest"
+```
 
 ### Ensemble methods
 
