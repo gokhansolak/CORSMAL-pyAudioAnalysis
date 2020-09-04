@@ -26,9 +26,6 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
     parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu). Default: fi.', default='fi')
     parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: svm.', default='svm')
-    # optional
-    # TODO: implement quiet option
-    parser.add_argument('-q', '--quiet', help='Print nothing but the result.', action='store_true')
 
     args = parser.parse_args()
 

@@ -19,7 +19,6 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: svm.', default='svm')
 
     # optional
-    # TODO: implement quiet option
     parser.add_argument('-v', '--validation', help='3-fold validation.', action='store_true')
 
     args = parser.parse_args()

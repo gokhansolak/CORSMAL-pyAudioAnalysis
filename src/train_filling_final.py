@@ -17,14 +17,10 @@ def train():
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     # required
-    parser.add_argument('-d', '--datapath', help='Path of the dataset wrt current working directory.', required=True)
+    parser.add_argument('-d', '--datapath', help='Path of the dataset w.r.t. current working directory.', required=True)
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
     parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu). Default: fi.', default='fi')
     parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: svm.', default='svm')
-
-    # optional
-    # TODO: implement quiet option
-    parser.add_argument('-q', '--quiet', help='Print nothing but the result.', action='store_true')
 
     args = parser.parse_args()
 
@@ -42,6 +38,6 @@ if __name__ == '__main__':
         df_obj = filling.predict_object(obj, model_name, args.algorithm, dataset_path, column_names)
         df = pd.concat([df, df_obj])
 
-    df.to_csv(model_name+'_result.csv', index=False)
+    df.to_csv(model_name+'.csv', index=False)
 
     print("il finito")
