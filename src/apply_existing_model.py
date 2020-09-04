@@ -6,7 +6,7 @@ from pyAudioAnalysis import audioTrainTest as aT
 import plotly.subplots
 import os, argparse, sys
 import pandas as pd
-import classify_filling_common as filling
+import filling_analysis_common as filling
 
 class_code_dict = {'fi':{'name':'Filling type', 'count':4}, 'fu': {'name':'Filling level [%]', 'count':3}}
 
