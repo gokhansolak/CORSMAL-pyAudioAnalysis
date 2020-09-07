@@ -6,7 +6,15 @@ The rest of our team's code resides in [v-iashin/CORSMAL](https://github.com/v-i
 
 ## Installation
 
-You should clone and [install pyAudioAnalysis](https://github.com/tyiannak/pyAudioAnalysis#installation) package.
+_Tested on Ubuntu 18.04_
+
+* Install _pyAudioAnalysis_ package according to [its readme](https://github.com/tyiannak/pyAudioAnalysis#installation).
+
+* Install _ffmpeg_ program for audio compression:
+
+```
+sudo apt install ffmpeg
+```
 
 ## Usage
 ### Validation set analysis
@@ -21,6 +29,8 @@ gather_validation_dataset.sh <source data path> <target data path> <class code>
 _Data paths_ should be specified w.r.t. the current working directory of the terminal. You can call it from another folder.
 The expected folder structures are shown at the end of this file.
 Killing the script in the middle may change the current directory. Class code should be "fi" for _filling type_, "fu" for _filling level_.
+
+**Warning:** Dataset paths of different batches (filling type or level, validation or final) must be separate, otherwise the library will confuse the classes.
 
 Then, the training and 3-fold validation sequence can be run using `train_filling_validation.py`:
 ```
