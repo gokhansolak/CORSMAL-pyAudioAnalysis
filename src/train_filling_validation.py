@@ -25,7 +25,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--datapath', help='Path of the dataset wrt current working directory.', required=True)
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
     parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu). Default: fi.', default='fi')
-    parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: svm.', default='svm')
+    parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: randomforest.', default='randomforest')
 
     args = parser.parse_args()
 
