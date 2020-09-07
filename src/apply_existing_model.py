@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import sys
+sys.path.insert(0, './pyAudioAnalysis')  # nopep8
 # takes an already trained pyAudioAnalysis model and predicts the
 # audio file classes in the given folder
 import pyAudioAnalysis
@@ -8,15 +10,14 @@ import os, argparse, sys
 import pandas as pd
 import filling_analysis_common as filling
 
-class_code_dict = {'fi':{'name':'Filling type', 'count':4}, 'fu': {'name':'Filling level [%]', 'count':3}}
 
 if __name__ == '__main__':
     parser=argparse.ArgumentParser()
     # required
     parser.add_argument('-d', '--datapath', help='Path of the test set wrt current working directory.', required=True)
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
-    parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu). Default: fi.', default='fi')
-    parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest... Default: svm.', default='svm')
+    parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu)', required=True)
+    parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest...', default='randomforest')
 
     # optional
     parser.add_argument('-v', '--validation', help='3-fold validation.', action='store_true')
@@ -26,8 +27,15 @@ if __name__ == '__main__':
     dataset_path = args.datapath
 
     model_name = args.modelname
-    class_name = class_code_dict[args.classcode]['name']
-    class_count = class_code_dict[args.classcode]['count']
+
+    if args.classcode == 'fi':
+        class_name = 'Filling type'
+        class_count = 4
+    elif args.classcode == 'fu':
+        class_name = 'Filling level [%]'
+        class_count = 3
+    else:
+        raise NotImplementedError
 
     column_names=["Object", "Sequence", class_name] + [class_name+" prob"+str(i) for i in range(class_count)]
     df = pd.DataFrame(columns=column_names)
