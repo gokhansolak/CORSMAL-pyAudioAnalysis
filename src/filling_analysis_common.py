@@ -46,4 +46,4 @@ def predict_object(object_no, model_name, algorithm, dirpath, column_names):
 
         print("classified obj"+str(object_no)+" "+seq_no+" : "+str(c))
 
-    return pd.DataFrame(results_dict)
+    return pd.DataFrame(results_dict).sort_values(['Object', 'Sequence'])
