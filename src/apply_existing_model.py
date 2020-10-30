@@ -18,6 +18,8 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--modelname', help='Name of the model, used for output names.', required=True)
     parser.add_argument('-c', '--classcode', help='Code of the class identifier (fi, fu)', required=True)
     parser.add_argument('-a', '--algorithm', help='Classifier: svm, svm_rbf, randomforest...', default='randomforest')
+    parser.add_argument('-s', '--predict_on_private', help='If True also makes preds for private subset',
+                        action='store_true', default=False)
 
     # optional
     parser.add_argument('-v', '--validation', help='3-fold validation.', action='store_true')
@@ -49,11 +51,19 @@ if __name__ == '__main__':
             for obj in test_objects[fold_no]:
                 df_obj = filling.predict_object(obj, model_name+str(fold_no), args.algorithm, dataset_path+str(fold_no), column_names)
                 df = pd.concat([df, df_obj])
+        df.to_csv(model_name+'_result.csv', index=False)
     else:
         for obj in [10,11,12]:
             df_obj = filling.predict_object(obj, model_name, args.algorithm, dataset_path, column_names)
             df = pd.concat([df, df_obj])
+        df.to_csv(model_name+'_result_public_test.csv', index=False)
 
-    df.to_csv(model_name+'_result.csv', index=False)
+        if args.predict_on_private:
+            # init the dataset again
+            df = pd.DataFrame(columns=column_names)
+            for obj in [13,14,15]:
+                df_obj = filling.predict_object(obj, model_name, args.algorithm, dataset_path, column_names)
+                df = pd.concat([df, df_obj])
+            df.to_csv(model_name+'_result_private_test.csv', index=False)
 
     print("il finito")
