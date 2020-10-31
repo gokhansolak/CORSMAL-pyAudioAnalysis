@@ -13,7 +13,7 @@ _Tested on Ubuntu 18.04_
 
 ## Restructure dataset
 
-We provide the scripts for both validation and final set ups. To replicate the results you need just need to run only the lines with `final`. If you would like to experiment with different models you will also need to prepare the folder for validation.
+We provide the scripts for both validation and final (public and private) set ups. To replicate the results you need just need to run only the lines with `final`. If you would like to experiment with different models you will also need to prepare the folder for validation.
 
 For final analysis on the test set, we use `./gather_final_dataset.sh`. `./gather_final_dataset.sh` puts the _wav_ files into a structured folder, separating classes, as expected by [pyAudioAnalysis](https://github.com/tyiannak/pyAudioAnalysis) library.
 
@@ -44,7 +44,7 @@ The expected source dir structure.
 ├── [1-9]
 │   └── audio
 │       └── sSS_fiI_fuU_bB_lL_audio.wav  # SS - subject id, I - fill level, etc
-└── [10-12]
+└── [10-15]
     └── audio
         └── XXXX_audio.wav  # OO - object id and XXXX - event id
 ```
@@ -88,6 +88,7 @@ python3 ./src/apply_existing_model.py -d <target data path>/final/fu/test -m "fl
 # for filling type (fi)
 python3 ./src/apply_existing_model.py -d <target data path>/final/fi/test -m "ftype-randomforest-final" -c "fi"
 ```
+Append `--predict_on_private` to each line to also predicton objects from private test set _13, 14, 15_.
 
 It will create `.csv` files in the `./` directory. They should match the ones in `./results`.
 We output the probabilities, so that we can ensemble the results with another model later.
