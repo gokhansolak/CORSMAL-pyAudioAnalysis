@@ -71,9 +71,17 @@ done
 
 for i in {10,11,12}; do
 
-  # test set
-  echo "test"
+  # public test set
+  echo "public_test"
   move_unlabeled_data "$i" "${target_path}/test"
+
+done
+
+for i in {13,14,15}; do
+
+  # private test set
+  echo "private_test"
+  move_unlabeled_data "$i" "${target_path}/test" || echo "Seems that you don't have private test set folders"
 
 done
 
